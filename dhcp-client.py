@@ -83,9 +83,10 @@ class Server(object):
       elif packet.type == "DISCOVER":
         # if no ips present to offer, return an offer with empty IP.
         try:
-          random.ip = self.ips.pop()
+          random.shuffle(self.ips)
+          ip = self.ips.pop()
           self.lan.broadcast(Message(packet.fr, SERVER, "OFFER", ip))
-          self.reserved[packet.fr] = random.ip
+          self.reserved[packet.fr] = ip
         except IndexError:
           self.lan.broadcast(Message(packet.fr, SERVER, "OFFER", ""))
       elif packet.type == "REQUEST":
